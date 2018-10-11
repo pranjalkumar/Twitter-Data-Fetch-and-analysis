@@ -30,7 +30,7 @@ exports.storeTweet= async (req,res) => {
             let retweet_count=tweet.retweet_count;
             let tweet_fav_count=tweet.favorite_count;
             let tweet_language=tweet.lang;
-            let tweet_date=tweet.created_at;
+            let tweet_date=new Date(tweet.created_at);
             let user_followers_count=tweet.user.followers_count;
             let users_mentions_count=tweet.entities.user_mentions.length;
             let url=tweet.user.url;
@@ -391,9 +391,48 @@ function numberFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
 // Date filter function
 
 function DateFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
+    //getting the date range
     let start_date=filter_value.start;
     let end_date=filter_value.end;
 
+    // checking whether the user has asked for response in csv form or not
+    //displaying output in csv format
+    if(csv){
+
+        res.writeHead(200, {
+            'Content-Type': 'text/csv',
+            'Content-Disposition': 'attachment; filename=sample.csv'
+        });
+
+        tweet_record.find({tweet_date:{'$gte':start_date,'$lte':end_date}})
+            .sort({tweet_date:1})
+            .limit(10)
+            .skip(page_num * 10)
+            .csv(res);
+    }
+    
+    // displaying output in normal response form
+
+    if(!csv){
+        tweet_record.find({tweet_date:{'$gte':start_date,'$lte':end_date}})
+            .sort({tweet_date:1})
+            .limit(10)
+            .skip(page_num * 10)
+            .exec((err,result)=>{
+                if (err) {
+                    res.status(500).json({
+                        success: false,
+                        message: 'sorry! could not fetch all results'
+                    });
+                } else {
+                    res.status(200).json({
+                        success: true,
+                        message: 'Matching record found',
+                        data: result
+                    });
+                }
+            });
+    }
 }
 
 // sorting function

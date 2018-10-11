@@ -10,7 +10,7 @@ const tweet_recordSchema= mongoose.Schema({
     retweet_count:{type:Number},
     tweet_fav_count:{type:Number},
     tweet_language:{type:String},
-    tweet_date:{type:String},
+    tweet_date:{type:Date},
     user_followers_count:{type:Number},
     users_mentions_count:{type:Number},
     url:{type:String}
