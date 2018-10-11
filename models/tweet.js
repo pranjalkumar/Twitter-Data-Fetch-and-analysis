@@ -1,5 +1,5 @@
 const mongoose=require('mongoose');
-
+const mongoose_csv = require('mongoose-csv');
 const tweet_recordSchema= mongoose.Schema({
     _id:mongoose.Schema.Types.ObjectId,
     tweet_text:{type:String},
@@ -13,6 +13,7 @@ const tweet_recordSchema= mongoose.Schema({
     users_mentions_count:{type:Number},
     url:{type:String}
 });
+tweet_recordSchema.plugin(mongoose_csv);
 
 const tweet_record=mongoose.model('tweet_record',tweet_recordSchema);
 
