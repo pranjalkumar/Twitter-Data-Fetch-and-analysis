@@ -1,6 +1,5 @@
 nodemon (for not restarting the server everytime)
 morgan (for logging the request)
 body parser (for parsing the body)
-mongodb atlas
 mongoose (database )
-multer (for uploading the files, parsing the file data)
+mongoose_csv (for displaying data in csv format)

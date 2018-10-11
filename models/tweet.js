@@ -1,5 +1,7 @@
 const mongoose=require('mongoose');
+//for exporting the data in csv format
 const mongoose_csv = require('mongoose-csv');
+// tweet schema
 const tweet_recordSchema= mongoose.Schema({
     _id:mongoose.Schema.Types.ObjectId,
     tweet_text:{type:String},
@@ -13,6 +15,7 @@ const tweet_recordSchema= mongoose.Schema({
     users_mentions_count:{type:Number},
     url:{type:String}
 });
+//adding the plugin
 tweet_recordSchema.plugin(mongoose_csv);
 
 const tweet_record=mongoose.model('tweet_record',tweet_recordSchema);

@@ -4,7 +4,7 @@ const tweet_record=require('../models/tweet').tweet_record;
 require('dotenv').load();
 const twitter= require('twitter');
 
-// estabilishing the connection
+// establish the connection with twitter API
 const client= new twitter({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
     consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -23,6 +23,7 @@ exports.storeTweet= async (req,res) => {
     await client.get('search/tweets', {q: query}, function(error, tweets, response) {
         tweets.statuses.forEach(function (tweet) {
             // console.log(tweet);
+            //extracting various parameter in twitter returned response
             let tweet_text=tweet.text;
             let tweet_username=tweet.user.name;
             let tweet_user_screenname=tweet.user.screen_name;
@@ -48,6 +49,7 @@ exports.storeTweet= async (req,res) => {
                 url:url
             });
 
+            // storing those response
             tweet_data.save((err,result)=>{
                 if(err){
                     res.status(500).json({
@@ -69,12 +71,16 @@ exports.storeTweet= async (req,res) => {
 
 // getting the tweets on the basis of filter
 exports.getTweet=(req,res)=>{
+
+    // getting the required parameter from the user
     let page_num=req.body.page_num;
     let filter_data_type=req.body.filter_data_type;
     let filter_param=req.body.filter_param;
     let filter_type=req.body.filter_type;
     let filter_value=req.body.filter_value;
     let csv=req.body.csv;
+
+    //deciding which fucntion to call on the basis of filter data type
 
     if(filter_data_type=='string'){
         stringFilter(res,page_num,filter_type,filter_param,filter_value,csv);
@@ -90,12 +96,17 @@ exports.getTweet=(req,res)=>{
     }
 };
 
+// string filter function
 function stringFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
     let query={};
 
+    //deciding which operation to perform
     if(filter_type=='start'){
+        //forming the query
         filter_value= new RegExp("^"+filter_value,'i');
         query[filter_param]=filter_value;
+        // checking whether the user has asked for response in csv form or not
+        //displaying output in csv format
         if(csv){
             res.writeHead(200, {
                 'Content-Type': 'text/csv',
@@ -107,6 +118,7 @@ function stringFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
                 .skip(page_num * 10)
                 .csv(res);
         }
+        // displaying output in normal response form
         if(!csv) {
             tweet_record.find(query)
                 .limit(10)
@@ -126,10 +138,14 @@ function stringFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
                     }
                 });
         }
+
     }else if(filter_type=='end'){
         filter_value= new RegExp(filter_value+"$",'i');
 
         query[filter_param]=filter_value;
+
+        // checking whether the user has asked for response in csv form or not
+        //displaying output in csv format
         if(csv){
             res.writeHead(200, {
                 'Content-Type': 'text/csv',
@@ -141,6 +157,7 @@ function stringFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
                 .skip(page_num * 10)
                 .csv(res);
         }
+        // displaying output in normal response form
         if(!csv) {
             tweet_record.find(query)
                 .limit(10)
@@ -160,10 +177,14 @@ function stringFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
                     }
                 });
         }
+
     }else if(filter_type=='contain'){
         filter_value= new RegExp(filter_value,'i');
 
         query[filter_param]=filter_value;
+        // checking whether the user has asked for response in csv form or not
+        //displaying output in csv format
+
         if(csv){
             res.writeHead(200, {
                 'Content-Type': 'text/csv',
@@ -175,6 +196,7 @@ function stringFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
                 .skip(page_num * 10)
                 .csv(res);
         }
+        // displaying output in normal response form
         if(!csv) {
             tweet_record.find(query)
                 .limit(10)
@@ -194,9 +216,13 @@ function stringFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
                     }
                 });
         }
+
     }else if(filter_type=='exact'){
 
         query[filter_param]=filter_value;
+
+        // checking whether the user has asked for response in csv form or not
+        //displaying output in csv format
         if(csv){
             res.writeHead(200, {
                 'Content-Type': 'text/csv',
@@ -208,6 +234,8 @@ function stringFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
                 .skip(page_num * 10)
                 .csv(res);
         }
+
+        // displaying output in normal response form
         if(!csv) {
             tweet_record.find(query)
                 .limit(10)
@@ -235,12 +263,15 @@ function stringFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
     }
 }
 
+// number filter function
 function numberFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
     let query={};
 
     if(filter_type=='less'){
         query[filter_param]={'$lt':filter_value};
 
+        // checking whether the user has asked for response in csv form or not
+        //displaying output in csv format
         if(csv) {
 
             res.writeHead(200, {
@@ -253,6 +284,7 @@ function numberFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
                 .skip(page_num * 10)
                 .csv(res);
         }
+        // displaying output in normal response form
         if(!csv) {
 
             tweet_record.find(query)
@@ -273,8 +305,11 @@ function numberFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
                     }
                 });
         }
+
     }else if(filter_type=='greater'){
         query[filter_param]={'$gt':filter_value};
+        // checking whether the user has asked for response in csv form or not
+        //displaying output in csv format
         if(csv){
             res.writeHead(200, {
                 'Content-Type': 'text/csv',
@@ -286,6 +321,7 @@ function numberFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
                 .skip(page_num * 10)
                 .csv(res);
         }
+        // displaying output in normal response form
         if(!csv) {
             tweet_record.find(query)
                 .limit(10)
@@ -305,8 +341,13 @@ function numberFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
                     }
                 });
         }
+
     }else if(filter_type=='equal'){
         query[filter_param]=filter_value;
+
+        // checking whether the user has asked for response in csv form or not
+        //displaying output in csv format
+
         if(csv){
             res.writeHead(200, {
                 'Content-Type': 'text/csv',
@@ -318,6 +359,7 @@ function numberFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
                 .skip(page_num * 10)
                 .csv(res);
         }
+        // displaying output in normal response form
         if(!csv) {
             tweet_record.find(query)
                 .limit(10)
@@ -337,6 +379,7 @@ function numberFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
                     }
                 });
         }
+
     }else{
         res.status(400).json({
             success:false,
@@ -345,18 +388,25 @@ function numberFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
     }
 }
 
+// Date filter function
+
 function DateFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
     let start_date=filter_value.start;
     let end_date=filter_value.end;
 
 }
 
+// sorting function
+
 exports.sort=(req,res)=>{
+    //taking the required param from the user
     let order_param=req.body.order_param;
     let page_num=req.body.page_num;
     let order_type=req.body.order_type;
     let csv=req.body.csv;
     let query={};
+
+    //deciding the type of order
     if(order_type=='decending'){
         query[order_param]=-1;
     }else if(order_type=='accending'){
@@ -367,6 +417,9 @@ exports.sort=(req,res)=>{
             message: 'Invalid order type'
         });
     }
+
+    // checking whether the user has asked for response in csv form or not
+    //displaying output in csv format
     if(csv){
         res.writeHead(200, {
             'Content-Type': 'text/csv',
@@ -379,6 +432,7 @@ exports.sort=(req,res)=>{
             .skip(page_num * 10)
             .csv(res);
     }
+    // displaying output in normal response form
     if(!csv) {
         tweet_record.find({})
             .sort(query)
