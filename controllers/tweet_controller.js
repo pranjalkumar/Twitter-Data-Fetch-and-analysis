@@ -410,7 +410,7 @@ function DateFilter(res,page_num,filter_type,filter_param,filter_value,csv) {
             .skip(page_num * 10)
             .csv(res);
     }
-    
+
     // displaying output in normal response form
 
     if(!csv){

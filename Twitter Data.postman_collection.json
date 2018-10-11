@@ -1,0 +1,168 @@
+{
+	"info": {
+		"_postman_id": "accf3fbb-c345-4bf0-a747-30f0025b1944",
+		"name": "Twitter Data",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/tweets/filter",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"page_num\":\"0\",\n\t\"filter_data_type\":\"number\",\n\t\"filter_param\":\"retweet_count\",\n\t\"filter_type\":\"greater\",\n\t\"filter_value\":\"3\",\n\t\"csv\":false\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/tweets/filter",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tweets",
+						"filter"
+					]
+				},
+				"description": "filtering tweets on various columns name"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/tweets/filter",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"page_num\":\"0\",\n\t\"filter_data_type\":\"string\",\n\t\"filter_param\":\"tweet_username\",\n\t\"filter_type\":\"start\",\n\t\"filter_value\":\"a\",\n\t\"csv\":false\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/tweets/filter",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tweets",
+						"filter"
+					]
+				},
+				"description": "String Data Filter"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/tweets/sort",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"page_num\":\"0\",\n\t\"order_param\":\"tweet_fav_count\",\n\t\"order_type\":\"accending\",\n\t\"csv\":true\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/tweets/sort",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tweets",
+						"sort"
+					]
+				},
+				"description": "Data Soting function"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/search_tweets",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"query\":\"Tsunami\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/search_tweets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"search_tweets"
+					]
+				},
+				"description": "Storing the twitter search record in Database"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/tweets/filter",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"page_num\":\"0\",\n\t\"filter_data_type\":\"date\",\n\t\"filter_param\":\"tweet_date\",\n\t\"filter_type\":\"date\",\n\t\"filter_value\":{\n\t\t\"start\":\"2018-10-11T07:36:19.000Z\",\n\t\t\"end\":\"2018-10-11T07:36:32.000Z\"\n\t},\n\t\"csv\":false\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/tweets/filter",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"tweets",
+						"filter"
+					]
+				},
+				"description": "Data returned on the basis of date range"
+			},
+			"response": []
+		}
+	]
+}
